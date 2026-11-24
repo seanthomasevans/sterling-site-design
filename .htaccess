@@ -1,0 +1,39 @@
+# Sterling Content, STAGING (temporary address). Built by ref/launch/build-staging.sh on 2026-11-24-1701.
+
+Options -Indexes
+DirectoryIndex index.html
+AddDefaultCharset utf-8
+AddType image/webp .webp
+AddType image/avif .avif
+AddType video/mp4 .mp4
+AddType font/woff2 .woff2
+AddType application/manifest+json .webmanifest
+
+RewriteEngine On
+
+# Pages of the old site (GoDaddy Website Builder) and the review site's old Why Canada address.
+# /about and /contact keep their names; Apache adds the trailing slash.
+RewriteRule ^(silver-reel|sterling-reel)/?$ /work/ [R=301,L]
+RewriteRule ^shooting-in-canada/?$ /why-canada/ [R=301,L]
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain application/javascript application/json image/svg+xml application/manifest+json
+</IfModule>
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 1 hour"
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType image/webp "access plus 30 days"
+  ExpiresByType image/jpeg "access plus 30 days"
+  ExpiresByType image/png "access plus 30 days"
+  ExpiresByType image/svg+xml "access plus 30 days"
+  ExpiresByType video/mp4 "access plus 30 days"
+  ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>
+<IfModule mod_headers.c>
+  <FilesMatch "^_astro/">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
